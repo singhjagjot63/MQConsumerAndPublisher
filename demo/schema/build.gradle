@@ -1,0 +1,47 @@
+plugins {
+    id("java")
+}
+
+group = "com.mqconsumer"
+version = "0.0.1-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+project.archivesBaseName = 'demo-schema'
+
+sourceSets.main.java.srcDirs('src/generated-resources/java')
+
+project.ext {
+    jaxbTargetDir = file("src/generated-resources/java")
+}
+
+configurations {
+    xsd2java
+}
+
+dependencies {
+    xsd2java "com.sun.xml.bind:jaxb-xjc:2.3.1"
+    xsd2java "com.sun.xml.bind:jaxb-impl:2.3.1"
+    xsd2java "org.glassfish.jaxb:jaxb-runtime:2.3.3"
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+}
+
+task xsd2java() {
+    doLast {
+        System.setProperty('javax.xml.accessExternalSchema', 'all')
+        jaxbTargetDir.mkdirs()
+
+        ant.taskdef(name: 'xjc',
+                    classname: 'com.sun.tools.xjc.XJCTask',
+                    classpath: configurations.xsd2java.asPath)
+        ant.jaxbTargetDir = jaxbTargetDir
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'com.mqconsumer.demo.schema',
+                schema: 'src/main/resources/demoXSD.xsd'
+        )
+    }
+}
+compileJava.dependsOn xsd2java

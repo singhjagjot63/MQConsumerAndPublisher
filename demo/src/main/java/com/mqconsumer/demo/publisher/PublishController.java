@@ -19,7 +19,7 @@ public class PublishController {
     public ResponseEntity<String> publishMessage(
             @RequestBody String systemMessage) {
         try {
-            jmsTemplate.convertAndSend("whiteHouse-extSystem",systemMessage);
+            jmsTemplate.convertAndSend("extSystem",systemMessage);
             return new ResponseEntity<>("Sent", HttpStatus.OK);
 
         } catch (Exception e) {

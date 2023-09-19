@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 
 import javax.xml.bind.JAXBException;
 
-
 @Component
 public class MessageConsumer {
 
@@ -18,7 +17,7 @@ public class MessageConsumer {
     XmlParseDemoService xmlParseDemoService;
     private static final Logger LOG = LoggerFactory.getLogger(MessageConsumer.class);
 
-    @JmsListener(destination = "whiteHouse-extSystem")
+    @JmsListener(destination = "extSystem")
     public void MessageListener(String message) throws JAXBException {
         if (!StringUtils.hasLength(message)) {
             throw new RuntimeException("Message is Empty");
@@ -26,7 +25,5 @@ public class MessageConsumer {
         xmlParseDemoService.getParsedXml(message);
         LOG.info("Message Received {}",message);
     }
-
-
 
 }

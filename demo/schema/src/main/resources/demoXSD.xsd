@@ -10,6 +10,8 @@
                             <xs:element name="meldingshode" type="xs:string" />
                             <xs:element name="subscriber" type="xs:string" />
                             <xs:element name="subscriberStatus" type="xs:string" />
+                            <xs:element name="itemWeight" type="xs:unsignedByte" />
+                            <xs:element name="itemName" type="xs:string" />
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>

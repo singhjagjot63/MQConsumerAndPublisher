@@ -3,6 +3,7 @@ package com.mqconsumer.demo.service;
 import com.mqconsumer.demo.domain.MQData;
 import com.mqconsumer.demo.repository.MQDataRepository;
 import com.mqconsumer.demo.schema.RootElement;
+import com.mqconsumer.demo.validate.ValidateData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,12 @@ import java.util.List;
 public class XmlParseDemoService {
 
     private final MQDataRepository mqDataRepository;
+    private final ValidateData validateData;
 
     @Autowired
-    public XmlParseDemoService(MQDataRepository mqDataRepository) {
+    public XmlParseDemoService(MQDataRepository mqDataRepository, ValidateData validateData) {
         this.mqDataRepository = mqDataRepository;
+        this.validateData = validateData;
     }
 
     public void getParsedXml(String xmlString) throws JAXBException {
@@ -30,9 +33,11 @@ public class XmlParseDemoService {
         RootElement rootElement = (RootElement) unmarshaller.
                 unmarshal(new StringReader(xmlString));
        List<MQData> mqData = convertXMLObject(rootElement);
-        for (MQData mq: mqData) {
-            mqDataRepository.save(mq);
-        }
+       if(validateData.dataValidation(mqData)) {
+           for (MQData mq : mqData) {
+               mqDataRepository.save(mq);
+           }
+       }
     }
 
     public List<MQData> convertXMLObject(RootElement rootElement) {
@@ -42,6 +47,8 @@ public class XmlParseDemoService {
             mqDataObj.setSubscriber(root.getSubscriber());
             mqDataObj.setStatus(root.getSubscriberStatus());
             mqDataObj.setCustomerNo(root.getMeldingshode());
+            mqDataObj.setItemName(root.getItemName());
+            mqDataObj.setIteamWeight(root.getItemWeight());
             mqData.add(mqDataObj);
         }
         return mqData;

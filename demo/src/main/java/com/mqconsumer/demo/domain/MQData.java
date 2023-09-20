@@ -22,6 +22,12 @@ public class MQData {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "itemname")
+    private String itemName;
+
+    @Column(name = "item_weight")
+    private int iteamWeight;
+
     public String getCustomerNo() {
         return customerNo;
     }
@@ -44,5 +50,21 @@ public class MQData {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public int getIteamWeight() {
+        return iteamWeight;
+    }
+
+    public void setIteamWeight(int iteamWeight) {
+        this.iteamWeight = iteamWeight;
     }
 }
